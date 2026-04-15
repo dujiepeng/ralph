@@ -2,7 +2,7 @@
 
 ![Ralph](ralph.webp)
 
-Ralph is an autonomous AI agent loop that runs AI coding tools ([Amp](https://ampcode.com), [Claude Code](https://docs.anthropic.com/en/docs/claude-code), or Codex CLI) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context. Memory persists via git history, `progress.txt`, and `prd.json`.
+Ralph is an autonomous AI agent loop that runs AI coding tools ([Amp](https://ampcode.com), [Claude Code](https://docs.anthropic.com/en/docs/claude-code), Codex CLI, or [Kimi CLI](https://moonshotai.github.io/kimi-cli/)) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context. Memory persists via git history, `progress.txt`, and `prd.json`.
 
 Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
 
@@ -14,6 +14,7 @@ Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
   - [Amp CLI](https://ampcode.com) (default)
   - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (`npm install -g @anthropic-ai/claude-code`)
   - Codex CLI (`npm install -g @openai/codex`)
+  - [Kimi CLI](https://moonshotai.github.io/kimi-cli/) (`pip install kimi-cli`)
 - `jq` installed (`brew install jq` on macOS)
 - A git repository for your project
 
@@ -34,6 +35,8 @@ cp /path/to/ralph/prompt.md scripts/ralph/prompt.md    # For Amp
 cp /path/to/ralph/CLAUDE.md scripts/ralph/CLAUDE.md    # For Claude Code
 # OR
 cp /path/to/ralph/CODEX.md scripts/ralph/CODEX.md      # For Codex CLI
+# OR
+cp /path/to/ralph/KIMI.md scripts/ralph/KIMI.md        # For Kimi CLI
 
 chmod +x scripts/ralph/ralph.sh
 ```
@@ -58,6 +61,12 @@ For Codex (manual)
 ```bash
 cp -r skills/prd ~/.codex/skills/
 cp -r skills/ralph ~/.codex/skills/
+```
+
+For Kimi (manual)
+```bash
+cp -r skills/prd ~/.kimi/skills/
+cp -r skills/ralph ~/.kimi/skills/
 ```
 
 ### Option 3: Use as Claude Code Marketplace
@@ -127,9 +136,12 @@ This creates `prd.json` with user stories structured for autonomous execution.
 
 # Using Codex CLI
 ./scripts/ralph/ralph.sh --tool codex [max_iterations]
+
+# Using Kimi CLI
+./scripts/ralph/ralph.sh --tool kimi [max_iterations]
 ```
 
-Default is 10 iterations. Use `--tool amp`, `--tool claude`, or `--tool codex` to select your AI coding tool.
+Default is 10 iterations. Use `--tool amp`, `--tool claude`, `--tool codex`, or `--tool kimi` to select your AI coding tool.
 
 Ralph will:
 1. Create a feature branch (from PRD `branchName`)
@@ -145,10 +157,11 @@ Ralph will:
 
 | File | Purpose |
 |------|---------|
-| `ralph.sh` | The bash loop that spawns fresh AI instances (supports `--tool amp`, `--tool claude`, or `--tool codex`) |
+| `ralph.sh` | The bash loop that spawns fresh AI instances (supports `--tool amp`, `--tool claude`, `--tool codex`, or `--tool kimi`) |
 | `prompt.md` | Prompt template for Amp |
 | `CLAUDE.md` | Prompt template for Claude Code |
 | `CODEX.md` | Prompt template for Codex CLI |
+| `KIMI.md` | Prompt template for Kimi CLI |
 | `prd.json` | User stories with `passes` status (the task list) |
 | `prd.json.example` | Example PRD format for reference |
 | `progress.txt` | Append-only learnings for future iterations |
@@ -175,7 +188,7 @@ npm run dev
 
 ### Each Iteration = Fresh Context
 
-Each iteration spawns a **new AI instance** (Amp, Claude Code, or Codex CLI) with clean context. The only memory between iterations is:
+Each iteration spawns a **new AI instance** (Amp, Claude Code, Codex CLI, or Kimi CLI) with clean context. The only memory between iterations is:
 - Git history (commits from previous iterations)
 - `progress.txt` (learnings and context)
 - `prd.json` (which stories are done)
@@ -236,7 +249,7 @@ git log --oneline -10
 
 ## Customizing the Prompt
 
-After copying `prompt.md` (for Amp), `CLAUDE.md` (for Claude Code), or `CODEX.md` (for Codex CLI) to your project, customize it for your project:
+After copying `prompt.md` (for Amp), `CLAUDE.md` (for Claude Code), `CODEX.md` (for Codex CLI), or `KIMI.md` (for Kimi CLI) to your project, customize it for your project:
 - Add project-specific quality check commands
 - Include codebase conventions
 - Add common gotchas for your stack
@@ -251,3 +264,4 @@ Ralph automatically archives previous runs when you start a new feature (differe
 - [Amp documentation](https://ampcode.com/manual)
 - [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code)
 - [Codex CLI documentation](https://developers.openai.com/codex/cli)
+- [Kimi CLI documentation](https://moonshotai.github.io/kimi-cli/)

@@ -29,8 +29,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate tool choice
-if [[ "$TOOL" != "amp" && "$TOOL" != "claude" && "$TOOL" != "codex" ]]; then
-  echo "Error: Invalid tool '$TOOL'. Must be 'amp', 'claude', or 'codex'."
+if [[ "$TOOL" != "amp" && "$TOOL" != "claude" && "$TOOL" != "codex" && "$TOOL" != "kimi" ]]; then
+  echo "Error: Invalid tool '$TOOL'. Must be 'amp', 'claude', 'codex', or 'kimi'."
   exit 1
 fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -93,9 +93,12 @@ for i in $(seq 1 $MAX_ITERATIONS); do
   elif [[ "$TOOL" == "claude" ]]; then
     # Claude Code: use --dangerously-skip-permissions for autonomous operation, --print for output
     OUTPUT=$(claude --dangerously-skip-permissions --print < "$SCRIPT_DIR/CLAUDE.md" 2>&1 | tee /dev/stderr) || true
-  else
+  elif [[ "$TOOL" == "codex" ]]; then
     # Codex CLI: use non-interactive exec mode for autonomous operation
     OUTPUT=$(codex exec --full-auto < "$SCRIPT_DIR/CODEX.md" 2>&1 | tee /dev/stderr) || true
+  else
+    # Kimi CLI: use --quiet for non-interactive mode (implicitly enables --yolo)
+    OUTPUT=$(kimi --quiet --input-format text < "$SCRIPT_DIR/KIMI.md" 2>&1 | tee /dev/stderr) || true
   fi
   
   # Check for completion signal
