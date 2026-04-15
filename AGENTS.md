@@ -36,6 +36,27 @@ cd flowchart && npm run build
 - `prd.json.example` - Example PRD format
 - `flowchart/` - Interactive React Flow diagram explaining how Ralph works
 
+## Bootstrapping Ralph in Another Project
+
+When the user says "使用 ralph" (or "use ralph" / "set up ralph"), copy the following files from `/Users/dujiepeng/project/AI/ralph/` into the target project's root (or a `scripts/ralph/` subdirectory if the project already has a `scripts/` convention):
+
+### Required core files
+- `ralph.sh`
+- `prompt.md`
+- `CLAUDE.md`
+- `CODEX.md`
+- `KIMI.md`
+
+### Recommended files (enforce PRD quality and workflow)
+- `prd.json.example`
+- `skills/prd/SKILL.md`
+- `skills/ralph/SKILL.md`
+
+### Optional
+- `AGENTS.md` — only if the target project does not already have one; merge rather than overwrite if it exists.
+
+After copying, ensure `ralph.sh` is executable (`chmod +x ralph.sh`) and remind the user to create or generate `prd.json` before running `./ralph.sh --tool <tool>`.
+
 ## Flowchart
 
 The `flowchart/` directory contains an interactive visualization built with React Flow. It's designed for presentations - click through to reveal each step with animations.
